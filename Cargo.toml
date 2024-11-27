@@ -11,14 +11,29 @@ path = "src/main.rs"
 name = "zero2prod"
 
 
-[target.x86_64-pc-windows-msvc]
-rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+# [target.x86_64-pc-windows-msvc]
+# rustflags = ["-C", "link-arg=-fuse-ld=lld"]
 
 [dependencies]
 actix-web = "4"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 serde = { version = "1", features = ["derive"] }
-sqlx = "0.8.2"
+config = "0.14.1"
+uuid = { version = "1", features = ["v4"] }
+chrono = { version = "0.4.38", default-features = false, features = ["clock"] }
 
 [dev-dependencies]
 reqwest = "0.12.9"
+
+[dependencies.sqlx]
+version = "0.8.2"
+default-features = false
+features = [
+    "runtime-tokio-rustls",
+    "macros",
+    "postgres",
+    "uuid",
+    "chrono",
+    "migrate",
+
+]

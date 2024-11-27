@@ -1,12 +1,17 @@
-// use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Responder};
-use zero2prod::run;
-
-// async fn greet(req: HttpRequest) -> impl Responder {
-//     let name = req.match_info().get("name").unwrap_or("World");
-//     format!("Hello, {}", &name)
-// }
+use sqlx::PgPool;
+use std::net::TcpListener;
+use zero2prod::configuration::get_configuration;
+use zero2prod::startup::run;
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
-    run("127.0.0.1")?.await
+    let configuration = get_configuration().expect("Failed to read configuration.");
+    let connection = PgPool::connect(&configuration.database.connection_string())
+        .await
+        .expect("Failed to connect to Postgres.");
+
+    let address = format!("localhost:{}", configuration.application_port);
+    let listener = TcpListener::bind(address)?;
+
+    run(listener, connection)?.await
 }
