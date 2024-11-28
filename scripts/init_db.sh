@@ -39,9 +39,9 @@ if [[ -z "${SKIP_DOCKER}" ]]; then
         -e POSTGRES_PASSWORD="${DB_PASSWORD}" \
         -e POSTGRES_DB="${DB_NAME}" \
         -p "${DB_PORT}":5432 \
-        -v pgdata:/var/lib/postgresql/data \
         -d postgres:17.1 \
         postgres -N 1000
+    # -v pgdata:/var/lib/postgresql/data \
 # ^ Increased maximum number of connections for testing purposes
 fi
 
